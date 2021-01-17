@@ -5,13 +5,25 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Instructions from './components/instructions';
 
+const getLocalData = (value) =>{
+  let data= localStorage.getItem(value);
+
+  if(data){
+    return JSON.parse(localStorage.getItem(value));
+  } 
+  else{
+    return [];
+  }
+}
+
+
 const App = () => {
-  const [items,setItems] = useState([]);//{id:1,item:'lab1'}
+  const [items,setItems] = useState(getLocalData('items'));//{id:1,item:'lab1'}
   const [input,setInput] = useState('');
   const [editing,setEditing] = useState(false);
   const [editingValue,setEditingValue] = useState({});
-  const [process,setProcess] = useState([]) //{id:1,item:'labwork'},{id:2,item:'project'}
-  const [done,setDone] = useState([])//{id:1,item:'lab1'},{id:2,item:'lab2'}
+  const [process,setProcess] = useState(getLocalData('process')) //{id:1,item:'labwork'},{id:2,item:'project'}
+  const [done,setDone] = useState(getLocalData('done'))//{id:1,item:'lab1'},{id:2,item:'lab2'}
   const val = useRef(null);
 
   const handleReplacing = (typeoflist)=>{
@@ -186,6 +198,18 @@ const App = () => {
   useEffect (()=>{
     val.current.focus();
   },[])
+
+  useEffect(()=>{
+    localStorage.setItem('items',JSON.stringify(items));
+  },[items])
+
+  useEffect(()=>{
+    localStorage.setItem('process',JSON.stringify(process));
+  },[process])
+
+  useEffect(()=>{
+    localStorage.setItem('done',JSON.stringify(done));
+  },[done])
 
   return (
     <>
